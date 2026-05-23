@@ -1,0 +1,41 @@
+name: Build Static Linux Musl Binary
+on: 
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CARGO_TERM_COLOR: always
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Installs musl compilation tools, standard C tooling, and dependencies
+      # required to compile the underlying C/Assembly layers of aws-lc-rs.
+      - name: Install Static Linux Build Toolchains
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y musl-tools cmake clang llvm nasm
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.90.0"
+          targets: x86_64-unknown-linux-musl
+
+      - name: Build Release
+        run: cargo build --release --target x86_64-unknown-linux-musl
+        env:
+          # CC_x86_64_unknown_linux_musl: Binds the musl wrapper compiler to compile C prerequisites.
+          # +crt-static: Bakes the C standard library directly into the binary core.
+          # strip=symbols: Destroys all debug tables and symbol metadata from the executable[cite: 4].
+          CC_x86_64_unknown_linux_musl: musl-gcc
+          RUSTFLAGS: "-C target-feature=+crt-static -C strip=symbols"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-musl-static-binary
+          path: target/x86_64-unknown-linux-musl/release/secure_radsec
