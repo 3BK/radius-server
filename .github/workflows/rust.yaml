@@ -38,7 +38,10 @@ jobs:
 
       - name: Generate CycloneDX SBOM
         # Generates a JSON-formatted CycloneDX SBOM mapping all dependencies
-        run: cargo cyclonedx --format json --all-features --output-filename radius-server_sbom.json
+        # outputs to bom.json (by default) and renames it
+        run: |
+          cargo cyclonedx --format json --all-features
+          mv bom.json radius-server_sbom.json
 
       - name: Build Release
         run: cargo build --release --target x86_64-unknown-linux-musl
