@@ -31,10 +31,14 @@ pub fn load_config(path: &str) -> Result<Config, Box<dyn std::error::Error>> {
 pub fn verify_file_permissions(path: &str) -> Result<(), Box<dyn std::error::Error>> {
     let metadata = fs::metadata(path)?;
     let mode = metadata.permissions().mode();
-    
+
     // Check if group or other have any read/write/execute permissions
     if mode & 0o077 != 0 {
-        return Err(format!("Insecure permissions ({:o}) on private key: {}. Must be 0600 or 0400.", mode, path).into());
+        return Err(format!(
+            "Insecure permissions ({:o}) on private key: {}. Must be 0600 or 0400.",
+            mode, path
+        )
+        .into());
     }
     Ok(())
 }
