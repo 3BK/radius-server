@@ -51,10 +51,15 @@ jobs:
           CC_x86_64_unknown_linux_musl: musl-gcc
           RUSTFLAGS: "-C target-feature=+crt-static -C strip=symbols"
 
-      - name: Upload Artifact
+      - name: Upload Release Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: linux-musl-static-release-bundle
+          # Use the pipe '|' for multi-line paths
           path: |
             target/x86_64-unknown-linux-musl/release/radsec_server
-            radius-server_sbom.json
+            radsec_server_sbom.json
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
