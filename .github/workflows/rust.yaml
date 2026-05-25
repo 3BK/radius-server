@@ -40,7 +40,7 @@ jobs:
         # Generates a JSON-formatted CycloneDX SBOM mapping all dependencies
         # outputs to bom.json (by default) and renames it
         run: |
-          cargo cyclonedx --format json --all-features --override-filename radius_server_sbom.json
+          cargo cyclonedx --format json --all-features --override-filename radius_server_sbom
 
       - name: Build Release
         run: cargo build --release --target x86_64-unknown-linux-musl
@@ -56,5 +56,5 @@ jobs:
         with:
           name: linux-musl-static-release-bundle
           path: |
-            target/x86_64-unknown-linux-musl/release/radius-server
+            target/x86_64-unknown-linux-musl/release/radsec_server
             radius-server_sbom.json
