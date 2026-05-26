@@ -87,11 +87,15 @@ pub fn spawn_shadow_actor(mut rx: ShadowRx, control_tx: Option<ControlTx>) {
                         if let Err(e) =
                             pkt.verify_request_message_authenticator(work.shared_secret.as_bytes())
                         {
-                            (false, format!("shadow_msg_auth_fail: {e}"))
+                            let msg = format!("shadow_msg_auth_fail: {}", e);
+                            (false, msg)
                         } else if work.enforce_eap_tls_only {
                             match enforce_eap_tls_only(&pkt.attributes) {
                                 Ok(_) => (true, "shadow_ok".to_string()),
-                                Err(e) => (false, format!("shadow_eap_fail: {e}")),
+                                Err(e) => {
+                                    let msg = format!("shadow_eap_fail: {}", e);
+                                    (false, msg)
+                                },
                             }
                         } else {
                             (false, "shadow_mode_without_eap_tls_only_disabled".to_string())
@@ -99,13 +103,19 @@ pub fn spawn_shadow_actor(mut rx: ShadowRx, control_tx: Option<ControlTx>) {
                     } else if work.enforce_eap_tls_only {
                         match enforce_eap_tls_only(&pkt.attributes) {
                             Ok(_) => (true, "shadow_ok".to_string()),
-                            Err(e) => (false, format!("shadow_eap_fail: {e}")),
+                            Err(e) => {
+                                let msg = format!("shadow_eap_fail: {}", e);
+                                (false, msg)
+                            },
                         }
                     } else {
                         (false, "shadow_mode_without_eap_tls_only_disabled".to_string())
                     }
                 }
-                Err(e) => (false, format!("shadow_parse_fail: {e}")),
+                Err(e) => {
+                    let msg = format!("shadow_parse_fail: {}", e);
+                    (false, msg)
+                },
             };
 
             if let Some(tx) = &control_tx {
