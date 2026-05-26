@@ -1,5 +1,5 @@
 use crate::config::{PeerPolicyConfig, TlsConfig};
-use pem::{parse, parse_many};
+use ::pem::{parse, parse_many};
 use rustls::crypto::aws_lc_rs;
 use rustls::pki_types::{
     CertificateDer, PrivateKeyDer, PrivatePkcs1KeyDer, PrivatePkcs8KeyDer, PrivateSec1KeyDer,
@@ -9,8 +9,8 @@ use rustls::{RootCertStore, ServerConfig};
 use sha2::{Digest, Sha256};
 use std::fs;
 use std::sync::Arc;
+use x509_parser::certificate::X509Certificate;
 use x509_parser::extensions::GeneralName;
-use x509_parser::prelude::*;
 use zeroize::Zeroize;
 
 #[derive(Debug, Clone)]
