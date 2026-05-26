@@ -69,7 +69,8 @@ pub type ShadowRx = mpsc::Receiver<ShadowWork>;
 pub fn spawn_control_event_drain(mut rx: ControlRx) {
     tokio::spawn(async move {
         while let Some(event) = rx.recv().await {
-            debug!(action = "control_event", "Control-plane event: {event:?}");
+            let msg = format!("Control-plane event: {:?}", event);
+            debug!(action = "control_event", "{}", msg);
         }
     });
 }
