@@ -13,7 +13,7 @@ RUN cargo build --release --target x86_64-unknown-linux-musl
 # Runtime Stage (Distroless / Scratch for zero attack surface)
 FROM scratch
 
-COPY --from=builder /usr/src/radsec/target/x86_64-unknown-linux-musl/release/secure_radsec /bin/secure-radsec
+COPY --from=builder /usr/src/radsec/target/x86_64-unknown-linux-musl/release/radsec_server /bin/radsec_server
 
 # Ensure non-root execution (PCI DSS / STIG constraint)
 USER 1000:1000
@@ -21,4 +21,4 @@ USER 1000:1000
 # Require environment variable to point to config if not using default
 ENV RADSEC_CONFIG="/etc/radsec/config.toml"
 
-ENTRYPOINT ["/bin/secure-radsec"]
+ENTRYPOINT ["/bin/radsec_server"]
