@@ -105,7 +105,7 @@ pub fn spawn_shadow_actor(mut rx: ShadowRx, control_tx: Option<ControlTx>) {
                         (false, "shadow_mode_without_eap_tls_only_disabled".to_string())
                     }
                 }
-                Err(e) => (false, format!("shadow_parse_fail: {}", e)),
+                Err(e) => (false, format!("shadow_parse_fail: {e}")),
             };
 
             if let Some(tx) = &control_tx {
