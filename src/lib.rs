@@ -1,3 +1,9 @@
 pub mod config;
+pub mod control;
 pub mod crypto;
+pub mod eap;
+pub mod kanidm;
+pub mod metrics;
+pub mod radius;
 pub mod server;
+pub mod state;
