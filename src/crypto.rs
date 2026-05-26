@@ -11,6 +11,7 @@ use std::fs;
 use std::sync::Arc;
 use x509_parser::certificate::X509Certificate;
 use x509_parser::extensions::GeneralName;
+use x509_parser::prelude::FromDer;
 use zeroize::Zeroize;
 
 #[derive(Debug, Clone)]
